@@ -4,7 +4,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
 export default defineConfig({
-  site: "https://YOUR_USERNAME.github.io",
+  site: "https://fvillacis.github.io",
 
   markdown: {
     processor: unified({

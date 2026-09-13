@@ -1,15 +1,25 @@
 ---
 import "katex/dist/katex.min.css";
 
-const { frontmatter } = Astro.props;
+interface PageData {
+  title?: string;
+  description?: string;
+  eyebrow?: string;
+  wide?: boolean;
+}
 
-const pageTitle =
-  frontmatter.title === "Home"
-    ? "Francisco Villacis"
-    : `${frontmatter.title} | Francisco Villacis`;
-
+const page = (Astro.props.frontmatter ?? Astro.props) as PageData;
+const title = page.title ?? "Home";
 const description =
-  frontmatter.description ?? "Academic website of Francisco Villacis";
+  page.description ?? "Academic website of Francisco Villacis";
+const pageTitle =
+  title === "Home" ? "Francisco Villacis" : `${title} | Francisco Villacis`;
+const currentPath = Astro.url.pathname;
+const isHome = currentPath === "/";
+const isResearch = currentPath.startsWith("/research");
+const canonicalURL = Astro.site
+  ? new URL(currentPath, Astro.site).toString()
+  : undefined;
 ---
 
 <!doctype html>
@@ -18,161 +28,272 @@ const description =
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
+    <meta name="theme-color" content="#f8f9f7" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {canonicalURL && <link rel="canonical" href={canonicalURL} />}
     <title>{pageTitle}</title>
   </head>
 
   <body>
-    <header>
-      <nav>
-        <a class="name" href="/">Francisco Villacis</a>
+    <a class="skip-link" href="#content">Skip to content</a>
 
-        <div class="links">
-          <a href="/">Home</a>
-          <a href="/research/">Research</a>
-        </div>
-      </nav>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="/">Francisco Villacis</a>
+
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <a class:list={{ active: isHome }} href="/" aria-current={isHome ? "page" : undefined}>
+            Home
+          </a>
+          <a
+            class:list={{ active: isResearch }}
+            href="/research/"
+            aria-current={isResearch ? "page" : undefined}
+          >
+            Research
+          </a>
+          <a href="mailto:fvillacis@uwaterloo.ca">Email</a>
+        </nav>
+      </div>
     </header>
 
-    <main>
+    <main
+      id="content"
+      class:list={["site-main", { "site-main--wide": page.wide }]}
+    >
+      {page.eyebrow && <p class="page-eyebrow">{page.eyebrow}</p>}
       <slot />
     </main>
 
-    <footer>
-      © {new Date().getFullYear()} Francisco Villacis
+    <footer class="site-footer">
+      <div class="footer-shell">
+        <p>Francisco Villacis · University of Waterloo</p>
+        <a href="mailto:fvillacis@uwaterloo.ca">fvillacis@uwaterloo.ca</a>
+      </div>
     </footer>
   </body>
 </html>
 
 <style is:global>
   :root {
-    font-family: Georgia, "Times New Roman", serif;
-    color: #202832;
-    background: #fbfaf7;
+    --ink: #202725;
+    --muted: #65706c;
+    --green: #235e50;
+    --line: #dde2df;
+    --paper: #f8f9f7;
+    --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino,
+      Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+      sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    font-family: var(--sans);
+    font-synthesis: none;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 
   body {
+    min-width: 320px;
     margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  header {
-    border-bottom: 1px solid #d9dde2;
+  ::selection {
+    background: #d9e6e1;
   }
 
-  nav {
-    max-width: 760px;
-    margin: auto;
-    padding: 1.25rem;
+  a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 10;
+    padding: 0.55rem 0.75rem;
+    background: var(--green);
+    color: white;
+    transform: translateY(-160%);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+
+  .site-header {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-shell {
+    width: min(100% - 3rem, 1000px);
+    min-height: 72px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 2rem;
   }
 
-  nav a {
-    color: #202832;
+  .brand {
+    font-family: var(--serif);
+    font-size: 1.08rem;
+    font-weight: 600;
     text-decoration: none;
   }
 
-  nav a:hover {
-    color: #17658f;
-  }
-
-  .name {
-    font-weight: bold;
-    font-size: 1.1rem;
-  }
-
-  .links {
+  .primary-nav {
     display: flex;
-    gap: 1.25rem;
+    align-items: center;
+    gap: 1.5rem;
   }
 
-  main {
-    max-width: 760px;
-    margin: 4rem auto;
-    padding: 0 1.25rem;
-  }
-
-  h1 {
-    font-size: clamp(2.3rem, 7vw, 4rem);
-    line-height: 1.05;
-    margin-bottom: 1.5rem;
-  }
-
-  h2 {
-    margin-top: 2.75rem;
-  }
-
-  p,
-  li {
-    font-size: 1.08rem;
-    line-height: 1.75;
-  }
-
-  main a {
-    color: #17658f;
-  }
-
-  footer {
-    max-width: 760px;
-    margin: 5rem auto 2rem;
-    padding: 1.25rem;
-    border-top: 1px solid #d9dde2;
-    color: #68727d;
+  .primary-nav a {
+    color: var(--muted);
     font-size: 0.9rem;
+    text-decoration: none;
   }
 
-  @media (max-width: 560px) {
-    nav {
-      align-items: flex-start;
+  .primary-nav a:hover,
+  .primary-nav a.active {
+    color: var(--green);
+  }
+
+  .site-main {
+    width: min(100% - 3rem, 720px);
+    min-height: 65vh;
+    margin: 0 auto;
+    padding: 5rem 0 6rem;
+  }
+
+  .site-main--wide {
+    width: min(100% - 3rem, 1000px);
+    padding-top: 4.5rem;
+  }
+
+  .page-eyebrow,
+  .eyebrow {
+    margin: 0 0 0.8rem;
+    color: var(--green);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .site-main:not(.site-main--wide) > h1 {
+    margin: 0 0 2.5rem;
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 7vw, 4rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .site-main h2 {
+    margin: 3.25rem 0 1rem;
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 1.65rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .site-main h3 {
+    margin: 2rem 0 0.7rem;
+    font-size: 1rem;
+    font-weight: 650;
+  }
+
+  .site-main:not(.site-main--wide) p,
+  .site-main:not(.site-main--wide) li {
+    color: #3f4845;
+    font-size: 1.02rem;
+    line-height: 1.72;
+  }
+
+  .site-main ul,
+  .site-main ol {
+    padding-left: 1.2rem;
+  }
+
+  .site-main:not(.site-main--wide) a {
+    color: var(--green);
+  }
+
+  .site-footer {
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+  }
+
+  .footer-shell {
+    width: min(100% - 3rem, 1000px);
+    margin: 0 auto;
+    padding: 2rem 0 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+  }
+
+  .footer-shell p {
+    margin: 0;
+  }
+
+  .site-main .katex {
+    font-size: 1em;
+  }
+
+  .site-main .katex-display {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  @media (max-width: 620px) {
+    .nav-shell,
+    .site-main,
+    .site-main--wide,
+    .footer-shell {
+      width: min(100% - 2rem, 1000px);
+    }
+
+    .nav-shell {
+      min-height: 64px;
+    }
+
+    .brand {
+      font-size: 1rem;
+    }
+
+    .primary-nav {
+      gap: 0.9rem;
+    }
+
+    .primary-nav a {
+      font-size: 0.84rem;
+    }
+
+    .site-main,
+    .site-main--wide {
+      padding: 3.5rem 0 4.5rem;
+    }
+
+    .footer-shell {
       flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    main {
-      margin-top: 2.5rem;
+      gap: 0.6rem;
     }
   }
-.katex-display {
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 0.5rem 0;
-}
- /* Paper-inspired reading layout */
-body {
-  font-family:
-    "Iowan Old Style",
-    "Palatino Linotype",
-    "Book Antiqua",
-    Palatino,
-    Georgia,
-    serif;
-}
-
-main {
-  max-width: 68ch;
-}
-
-main p,
-main li {
-  font-size: 1.05rem;
-  line-height: 1.8;
-}
-
-/* Make inline mathematics blend into prose */
-main .katex {
-  font-size: 1.02em;
-}
-
-/* Give displayed equations breathing room */
-main .katex-display {
-  margin: 1.5rem 0;
-  padding: 0.4rem 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-}
-
-main .katex-display > .katex {
-  font-size: 1.08em;
-}
 </style>

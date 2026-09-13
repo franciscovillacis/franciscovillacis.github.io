@@ -2,6 +2,7 @@
 layout: ../layouts/BaseLayout.astro
 title: Research
 description: Research interests and current projects of Francisco Villacis.
+eyebrow: Geometry · Combinatorics · Mathematical physics
 ---
 
 # Research
@@ -13,9 +14,7 @@ I am interested in understanding geometric spaces using combinatorics. Construct
 ### Amoebas of Linear Spaces
 A projective toric variety $X_{\Delta}$ carries a moment map $\mu:X_{\Delta}\to \mathbb{R}^n$ whose image is a polytope. Given a subvariety $Y\subset X_{\Delta}$, I study what combinatorial structure does the compactified amoeba $\mu(Y)$ have, and what geometric information about $Y$ does it contain. My current focus is the case where $Y$ is a linear subspace of projective space where matroid theory tools can be used.
 
-## Papers and notes
-TBA
-<!-- - Principal Minors and Absolute Values — status: in preparation -->
+<!-- Papers and notes will be added here as they become available. -->
 
 ## Other interests
-My mathematical interests mainly lie in symplectic and algebraic geometry, mirror symmetry and combinatorics. Outside of math, I sometimes compete in amateur boxing matches and enjoy various types of music (I am much better at listening than playing).
+My mathematical interests mainly lie in symplectic and algebraic geometry, mirror symmetry and combinatorics. Outside of math, I sometimes compete in amateur boxing matches and enjoy various types of music (I am much better at listening than playing though).
