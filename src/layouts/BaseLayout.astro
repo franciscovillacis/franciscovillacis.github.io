@@ -1,0 +1,178 @@
+---
+import "katex/dist/katex.min.css";
+
+const { frontmatter } = Astro.props;
+
+const pageTitle =
+  frontmatter.title === "Home"
+    ? "Francisco Villacis"
+    : `${frontmatter.title} | Francisco Villacis`;
+
+const description =
+  frontmatter.description ?? "Academic website of Francisco Villacis";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <a class="name" href="/">Francisco Villacis</a>
+
+        <div class="links">
+          <a href="/">Home</a>
+          <a href="/research/">Research</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer>
+      © {new Date().getFullYear()} Francisco Villacis
+    </footer>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    font-family: Georgia, "Times New Roman", serif;
+    color: #202832;
+    background: #fbfaf7;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  header {
+    border-bottom: 1px solid #d9dde2;
+  }
+
+  nav {
+    max-width: 760px;
+    margin: auto;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  nav a {
+    color: #202832;
+    text-decoration: none;
+  }
+
+  nav a:hover {
+    color: #17658f;
+  }
+
+  .name {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  .links {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  main {
+    max-width: 760px;
+    margin: 4rem auto;
+    padding: 0 1.25rem;
+  }
+
+  h1 {
+    font-size: clamp(2.3rem, 7vw, 4rem);
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    margin-top: 2.75rem;
+  }
+
+  p,
+  li {
+    font-size: 1.08rem;
+    line-height: 1.75;
+  }
+
+  main a {
+    color: #17658f;
+  }
+
+  footer {
+    max-width: 760px;
+    margin: 5rem auto 2rem;
+    padding: 1.25rem;
+    border-top: 1px solid #d9dde2;
+    color: #68727d;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 560px) {
+    nav {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    main {
+      margin-top: 2.5rem;
+    }
+  }
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.5rem 0;
+}
+ /* Paper-inspired reading layout */
+body {
+  font-family:
+    "Iowan Old Style",
+    "Palatino Linotype",
+    "Book Antiqua",
+    Palatino,
+    Georgia,
+    serif;
+}
+
+main {
+  max-width: 68ch;
+}
+
+main p,
+main li {
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+/* Make inline mathematics blend into prose */
+main .katex {
+  font-size: 1.02em;
+}
+
+/* Give displayed equations breathing room */
+main .katex-display {
+  margin: 1.5rem 0;
+  padding: 0.4rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+main .katex-display > .katex {
+  font-size: 1.08em;
+}
+</style>
