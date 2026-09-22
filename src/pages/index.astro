@@ -5,181 +5,25 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 <BaseLayout
   title="Home"
   description="Academic website of Francisco Villacis, mathematics PhD student at the University of Waterloo."
-  wide={true}
 >
-  <section class="intro" aria-labelledby="intro-title">
-    <div class="intro-copy">
-      <p class="eyebrow">
-        Math · Math · Math · Math
-      </p>
-      <h1 id="intro-title">Francisco Villacis</h1>
-      <p class="welcome">
-        Hi
-      </p>
-
-      <div class="intro-links">
-        <a href="/research/">Research</a>
-        <a href="mailto:fvillacis@uwaterloo.ca">Email</a>
+  <h1>Francisco Villacis</h1>
+    <div class="profile">
+      <div class="biography">
+        <p>I am a PhD student at the University of Waterloo under the supervision of Elana Kalashnikov and Ruxandra Moraru.</p>
+        <p>My research lies at the intersection of geometry and combinatorics, with connections to mathematical physics. I study how combinatorial structures, such as matroids and polyhedral decompositions, encode geometric information.</p>
+        <p>I am currently studying images of subvarieties of projective toric varieties under moment maps. For linear subspaces of projective space, I investigate how much of this geometry is determined by matroids and related combinatorial data.</p>
+        <div class="research-link"><a href="/research/">Read more about my research →</a></div>
+        <h2>Preprints</h2>
+        <p>Preprints will be added here as they become available.</p>
+        <h2>Notes</h2>
+        <p>Lecture notes, talks, and other mathematical material will be added here as they become available.</p>
       </div>
+      <figure>
+        <img src="/images/francisco-villacis.jpeg" alt="Portrait of Francisco Villacis" width="1536" height="2048">
+        <figcaption>
+          University of Waterloo<br>
+          <a href="mailto:fvillacis@uwaterloo.ca">fvillacis@uwaterloo.ca</a>
+        </figcaption>
+      </figure>
     </div>
-
-    <figure class="portrait">
-      <img
-        src="/images/francisco-villacis.jpeg"
-        alt="Portrait of Francisco Villacis"
-        width="1536"
-        height="2048"
-        fetchpriority="high"
-        decoding="async"
-      />
-    </figure>
-  </section>
-
-  <section class="home-section" aria-labelledby="overview-title">
-    <h2 id="overview-title">Overview</h2>
-    <div>
-      <p>
-        I am a PhD student at the University of Waterloo under the supervision of Elana Kalashnikov and Ruxandra Moraru. My research lies at the intersection of geometry and combinatorics, with connections to mathematical physics. I study how combinatorial structures, such as matroids and polyhedral decompositions, encode geometric information.
-      </p>
-    </div>
-  </section>
-
-  <section class="home-section" aria-labelledby="research-title">
-    <h2 id="research-title">Current research</h2>
-    <div>
-      <p>
-        I am currently studying images of subvarieties of projective toric
-        varieties under moment maps. For linear subspaces of projective space, I
-        investigate how much of this geometry is determined by matroids and
-        related combinatorial data.
-      </p>
-      <a class="more-link" href="/research/">Read more about my research →</a>
-    </div>
-  </section>
-
-  <section class="home-section" aria-labelledby="notes-title">
-    <h2 id="notes-title">Notes and teaching</h2>
-    <div>
-      <p>
-        Lecture notes, teaching material, talks, and publications will be added
-        here as they become available.
-      </p>
-    </div>
-  </section>
-
-  <section class="home-section" aria-labelledby="other-title">
-    <h2 id="other-title">Other</h2>
-    <div>
-      <p>
-        Outside of math, I sometimes compete in amateur boxing matches and enjoy various types of music (I am much better at listening than playing though).
-      </p>
-    </div>
-  </section>
 </BaseLayout>
-
-<style>
-  .intro {
-    padding: 0.5rem 0 5rem;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 285px;
-    align-items: center;
-    gap: clamp(3rem, 8vw, 5.75rem);
-  }
-
-  .intro h1 {
-    max-width: 10ch;
-    margin: 0;
-    font-family: var(--serif);
-    font-size: clamp(3.2rem, 6vw, 4.35rem);
-    font-weight: 500;
-    letter-spacing: -0.045em;
-    line-height: 0.98;
-  }
-
-  .welcome {
-    margin: 1.35rem 0 0;
-    color: #3f4946;
-    font-size: 1rem;
-    line-height: 1.6;
-  }
-
-  .intro-links {
-    margin-top: 1.65rem;
-    display: flex;
-    gap: 1.4rem;
-  }
-
-  .intro-links a,
-  .more-link {
-    color: var(--green);
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-underline-offset: 0.25em;
-  }
-
-  .portrait {
-    width: 285px;
-    aspect-ratio: 3 / 4;
-    margin: 0;
-    overflow: hidden;
-    border: 1px solid var(--line);
-    border-radius: 2px;
-  }
-
-  .portrait img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .home-section {
-    padding: 2.4rem 0;
-    display: grid;
-    grid-template-columns: 180px minmax(0, 1fr);
-    gap: 2.5rem;
-    border-top: 1px solid var(--line);
-  }
-
-  .home-section h2 {
-    margin: 0;
-    font-family: var(--serif);
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-
-  .home-section p {
-    max-width: 39rem;
-    margin: 0;
-    color: #46504c;
-    font-size: 1rem;
-    line-height: 1.7;
-  }
-
-  .more-link {
-    display: inline-block;
-    margin-top: 1rem;
-  }
-
-  @media (max-width: 680px) {
-    .intro {
-      padding: 0 0 4rem;
-      grid-template-columns: 1fr;
-      gap: 2.75rem;
-    }
-
-    .intro h1 {
-      font-size: clamp(2.9rem, 14vw, 3.8rem);
-    }
-
-    .portrait {
-      width: min(255px, 78vw);
-    }
-
-    .home-section {
-      grid-template-columns: 1fr;
-      gap: 0.9rem;
-    }
-  }
-</style>

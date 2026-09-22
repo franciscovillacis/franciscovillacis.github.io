@@ -1,11 +1,10 @@
 ---
 import "katex/dist/katex.min.css";
+import "../styles/global.css";
 
 interface PageData {
   title?: string;
   description?: string;
-  eyebrow?: string;
-  wide?: boolean;
 }
 
 const page = (Astro.props.frontmatter ?? Astro.props) as PageData;
@@ -33,268 +32,22 @@ const canonicalURL = Astro.site
     {canonicalURL && <link rel="canonical" href={canonicalURL} />}
     <title>{pageTitle}</title>
   </head>
-
   <body>
     <a class="skip-link" href="#content">Skip to content</a>
-
-    <header class="site-header">
-      <div class="nav-shell">
-        <a class="brand" href="/">Francisco Villacis</a>
-
-        <nav class="primary-nav" aria-label="Primary navigation">
-          <a class:list={{ active: isHome }} href="/" aria-current={isHome ? "page" : undefined}>
-            Home
-          </a>
-          <a
-            class:list={{ active: isResearch }}
-            href="/research/"
-            aria-current={isResearch ? "page" : undefined}
-          >
-            Research
-          </a>
-	  <a href="/cv.pdf" target="_blank" rel="noopener noreferrer">CV</a>
-          <a href="mailto:fvillacis@uwaterloo.ca">Email</a>
-        </nav>
-      </div>
+    <header>
+      <nav aria-label="Primary navigation">
+        <a href="/" aria-current={isHome ? "page" : undefined}>Home</a>
+        <a href="/research/" aria-current={isResearch ? "page" : undefined}>
+          Research
+        </a>
+        <a href="/cv.pdf" target="_blank" rel="noopener noreferrer">CV</a>
+      </nav>
     </header>
-
-    <main
-      id="content"
-      class:list={["site-main", { "site-main--wide": page.wide }]}
-    >
-      {page.eyebrow && <p class="page-eyebrow">{page.eyebrow}</p>}
-      <slot />
-    </main>
-
-    <footer class="site-footer">
-      <div class="footer-shell">
-        <p>Francisco Villacis · University of Waterloo</p>
-        <a href="mailto:fvillacis@uwaterloo.ca">fvillacis@uwaterloo.ca</a>
+    <main id="content">
+      <div class:list={{ reading: !isHome }}>
+        <slot />
       </div>
-    </footer>
+    </main>
+    <footer>Francisco Villacis · University of Waterloo</footer>
   </body>
 </html>
-
-<style is:global>
-  :root {
-    --ink: #202725;
-    --muted: #65706c;
-    --green: #235e50;
-    --line: #dde2df;
-    --paper: #f8f9f7;
-    --serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino,
-      Georgia, serif;
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-      sans-serif;
-    color: var(--ink);
-    background: var(--paper);
-    font-family: var(--sans);
-    font-synthesis: none;
-  }
-
-  * {
-    box-sizing: border-box;
-  }
-
-  body {
-    min-width: 320px;
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-  }
-
-  ::selection {
-    background: #d9e6e1;
-  }
-
-  a {
-    color: inherit;
-    text-underline-offset: 0.2em;
-    text-decoration-thickness: 1px;
-  }
-
-  img {
-    display: block;
-    max-width: 100%;
-  }
-
-  .skip-link {
-    position: fixed;
-    top: 0.75rem;
-    left: 0.75rem;
-    z-index: 10;
-    padding: 0.55rem 0.75rem;
-    background: var(--green);
-    color: white;
-    transform: translateY(-160%);
-  }
-
-  .skip-link:focus {
-    transform: translateY(0);
-  }
-
-  .site-header {
-    border-bottom: 1px solid var(--line);
-  }
-
-  .nav-shell {
-    width: min(100% - 3rem, 1000px);
-    min-height: 72px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 2rem;
-  }
-
-  .brand {
-    font-family: var(--serif);
-    font-size: 1.08rem;
-    font-weight: 600;
-    text-decoration: none;
-  }
-
-  .primary-nav {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .primary-nav a {
-    color: var(--muted);
-    font-size: 0.9rem;
-    text-decoration: none;
-  }
-
-  .primary-nav a:hover,
-  .primary-nav a.active {
-    color: var(--green);
-  }
-
-  .site-main {
-    width: min(100% - 3rem, 720px);
-    min-height: 65vh;
-    margin: 0 auto;
-    padding: 5rem 0 6rem;
-  }
-
-  .site-main--wide {
-    width: min(100% - 3rem, 1000px);
-    padding-top: 4.5rem;
-  }
-
-  .page-eyebrow,
-  .eyebrow {
-    margin: 0 0 0.8rem;
-    color: var(--green);
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-  }
-
-  .site-main:not(.site-main--wide) > h1 {
-    margin: 0 0 2.5rem;
-    font-family: var(--serif);
-    font-size: clamp(2.8rem, 7vw, 4rem);
-    font-weight: 500;
-    letter-spacing: -0.035em;
-    line-height: 1;
-  }
-
-  .site-main h2 {
-    margin: 3.25rem 0 1rem;
-    color: var(--ink);
-    font-family: var(--serif);
-    font-size: 1.65rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-  }
-
-  .site-main h3 {
-    margin: 2rem 0 0.7rem;
-    font-size: 1rem;
-    font-weight: 650;
-  }
-
-  .site-main:not(.site-main--wide) p,
-  .site-main:not(.site-main--wide) li {
-    color: #3f4845;
-    font-size: 1.02rem;
-    line-height: 1.72;
-  }
-
-  .site-main ul,
-  .site-main ol {
-    padding-left: 1.2rem;
-  }
-
-  .site-main:not(.site-main--wide) a {
-    color: var(--green);
-  }
-
-  .site-footer {
-    border-top: 1px solid var(--line);
-    color: var(--muted);
-  }
-
-  .footer-shell {
-    width: min(100% - 3rem, 1000px);
-    margin: 0 auto;
-    padding: 2rem 0 2.5rem;
-    display: flex;
-    justify-content: space-between;
-    gap: 1.5rem;
-    font-size: 0.85rem;
-  }
-
-  .footer-shell p {
-    margin: 0;
-  }
-
-  .site-main .katex {
-    font-size: 1em;
-  }
-
-  .site-main .katex-display {
-    margin: 1.5rem 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-  }
-
-  @media (max-width: 620px) {
-    .nav-shell,
-    .site-main,
-    .site-main--wide,
-    .footer-shell {
-      width: min(100% - 2rem, 1000px);
-    }
-
-    .nav-shell {
-      min-height: 64px;
-    }
-
-    .brand {
-      font-size: 1rem;
-    }
-
-    .primary-nav {
-      gap: 0.9rem;
-    }
-
-    .primary-nav a {
-      font-size: 0.84rem;
-    }
-
-    .site-main,
-    .site-main--wide {
-      padding: 3.5rem 0 4.5rem;
-    }
-
-    .footer-shell {
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-  }
-</style>

@@ -1,5 +1,34 @@
 # Astro Starter Kit: Minimal
 
+## GitHub Pages deployment
+
+This site's production URL is **https://franciscovillacis.github.io/**, matching
+the Git remote `franciscovillacis/franciscovillacis.github.io`. The local folder
+and npm package name (`fvillacis.github.io`) do not determine the published URL.
+
+Keep `site` in `astro.config.mjs` set to `https://franciscovillacis.github.io`.
+This is a GitHub Pages user site, so it is served at `/` without a repository
+`base` path. The portrait, styles, `/research/`, and `/cv.pdf` use this root.
+
+In the repository's **Settings → Pages**, the source must be **GitHub Actions**.
+The workflow in `.github/workflows/deploy.yml` builds and uploads the Astro
+output, then deploys it on pushes to `main` or manual workflow runs. Deployment
+runs are serialized to avoid overlapping deployments.
+
+Before publishing, run `npm run build` and use `npm run preview` to check the
+production output. No separate lint, test, or type-check script is configured.
+For development, use `npm run dev -- --background`; manage it with
+`npm run astro -- dev status`, `npm run astro -- dev logs`, and
+`npm run astro -- dev stop`.
+
+Deployment reference: [Astro's GitHub Pages guide](https://docs.astro.build/en/guides/deploy/github/).
+
+## Math rendering
+
+The direct `katex` dependency supplies the stylesheet and fonts. The npm
+`overrides` entry keeps the Markdown math renderer on that same version.
+Update them together to avoid incorrect superscript and subscript sizing.
+
 ```sh
 npm create astro@latest -- --template minimal
 ```
