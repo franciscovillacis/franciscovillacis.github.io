@@ -16,5 +16,3 @@ A projective toric variety $X_{\Delta}$ carries a moment map $\mu:X_{\Delta}\to 
 
 <!-- Papers and notes will be added here as they become available. -->
 
-## Other interests
-My mathematical interests mainly lie in symplectic and algebraic geometry, mirror symmetry and combinatorics. Outside of math, I sometimes compete in amateur boxing matches and enjoy various types of music (I am much better at listening than playing though).
