@@ -23,6 +23,21 @@ For development, use `npm run dev -- --background`; manage it with
 
 Deployment reference: [Astro's GitHub Pages guide](https://docs.astro.build/en/guides/deploy/github/).
 
+## Analytics
+
+The shared layout loads GoatCounter in production builds. View the dashboard
+at https://franciscovillacis.goatcounter.com/ while signed in to your account.
+The tracker is omitted during development, and GoatCounter ignores localhost
+previews by default.
+
+In addition to page views, the site records clicks on the CV navigation link
+(`cv`) and the preprint's arXiv link (`preprint-2609.25499`). These count link
+clicks, not confirmed downloads or reads. To track a future paper link, add a
+unique `data-goatcounter-click` value and a descriptive `data-goatcounter-title`.
+
+Integration references: [Getting started](https://www.goatcounter.com/help/start)
+and [click events](https://www.goatcounter.com/help/events).
+
 ## Math rendering
 
 The direct `katex` dependency supplies the stylesheet and fonts. The npm

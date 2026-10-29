@@ -40,7 +40,13 @@ const canonicalURL = Astro.site
         <a href="/research/" aria-current={isResearch ? "page" : undefined}>
           Research
         </a>
-        <a href="/cv.pdf" target="_blank" rel="noopener noreferrer">CV</a>
+        <a
+          href="/cv.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-goatcounter-click="cv"
+          data-goatcounter-title="CV"
+        >CV</a>
       </nav>
     </header>
     <main id="content">
@@ -49,5 +55,13 @@ const canonicalURL = Astro.site
       </div>
     </main>
     <footer>Francisco Villacis · University of Waterloo</footer>
+    {import.meta.env.PROD && (
+      <script
+        is:inline
+        data-goatcounter="https://franciscovillacis.goatcounter.com/count"
+        async
+        src="https://gc.zgo.at/count.js"
+      ></script>
+    )}
   </body>
 </html>
