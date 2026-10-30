@@ -16,8 +16,8 @@ Currently, I'm studying different combinatorial structures that describe the geo
 
 ## Interactive visualizations
 
-### Moment image explorer
+### Visualization of moment map image
 
-Explore moment images in the standard simplex for $\operatorname{Gr}(2,3)$, $\operatorname{Gr}(2,4)$, and $\operatorname{Gr}(3,4)$. Move circuit points and switch between starting configurations to see how the images change.
+Interactive plot of compactified linear amoebas with their circuit points.
 
 [Open the interactive visualization](/visualizations/grassmannian-explorer/)
