@@ -13,3 +13,11 @@ Some examples of these include moment maps of projective toric varieties, whose 
 Currently, I'm studying different combinatorial structures that describe the geometry of compactified amoebas, which are moment map images of subvarieties inside a projective toric variety.
 
 <!-- Papers and notes will be added here as they become available. -->
+
+## Interactive visualizations
+
+### Moment image explorer
+
+Explore moment images in the standard simplex for $\operatorname{Gr}(2,3)$, $\operatorname{Gr}(2,4)$, and $\operatorname{Gr}(3,4)$. Move circuit points and switch between starting configurations to see how the images change.
+
+[Open the interactive visualization](/visualizations/grassmannian-explorer/)
