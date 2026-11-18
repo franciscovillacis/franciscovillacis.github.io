@@ -8,6 +8,25 @@ const html = readFileSync(new URL('../public/visualizations/grassmannian-explore
 const geometry = html.slice(html.indexOf('var Ou=2*Math.PI'), html.indexOf('var Mt='));
 const { qu: preset, Yu: move, Zu: model, Xu: phase, Da: currentPhase, editableMomentCircuit: editable } =
   new Function(`${geometry}; return {qu, Yu, Zu, Xu, Da, editableMomentCircuit};`)();
+const weightGeometry = html.slice(html.indexOf('var Ms=2*Math.PI'), html.indexOf('var Ou=2*Math.PI'));
+const { Du: weightPreset, Fu: weightModel, Uu: moveWeight, editableWeightCircuit } =
+  new Function(`${weightGeometry}; return {Du, Fu, Uu, editableWeightCircuit};`)();
+
+function weightCircuit(state, id) {
+  const circuit = weightModel(state).circuits.find(point => point.id === id);
+  assert.ok(circuit, `Missing circuit ${id}`);
+  return circuit;
+}
+
+function moveToVertex(state, id, vertex) {
+  const target = state.weights.map((_, index) => Number(index === vertex));
+  const boundary = moveWeight(state, id, target);
+  assert.equal(boundary.movedCircuitId, `p${vertex + 1}`);
+  const circuit = weightCircuit(boundary, boundary.movedCircuitId);
+  assert.deepEqual(circuit.support, [vertex]);
+  close(circuit.point, target);
+  return boundary;
+}
 
 function close(actual, expected, tolerance = 1e-8) {
   assert.equal(actual.length, expected.length);
@@ -100,5 +119,79 @@ test('phase endpoints remain reversible and genuine line/edge presets stay fixed
   for (const name of ['segment', 'edge']) {
     assert.equal(model(preset(name)).phaseAdjustable, false);
     assert.equal(model(phase(preset(name), 0.4)).rank, 1);
+  }
+});
+
+for (const size of [3, 4]) {
+  test(`Gr(2,${size}): each pair can reach either vertex and return along its original edge`, () => {
+    // Unequal weights catch a reset to the generic centered image on recovery.
+    const initial = {weights: [1, 3, 2, 5].slice(0, size)};
+    const original = weightModel(initial);
+    for (const pair of original.circuits) {
+      for (const vertex of pair.support) {
+        const boundary = moveToVertex(initial, pair.id, vertex);
+        assert.equal(weightModel(boundary).shape, size === 3 ? 'line segment' : 'cone over an ellipse');
+        const singleton = weightCircuit(boundary, boundary.movedCircuitId);
+        const handle = editableWeightCircuit(boundary, singleton);
+        assert.deepEqual(handle.support, pair.support);
+        assert.deepEqual(handle.actualSupport, [vertex]);
+
+        // On pointer release the next gesture starts on the singleton.
+        const restored = moveWeight(structuredClone(boundary), singleton.id, pair.point);
+        assert.equal(restored.movedCircuitId, pair.id);
+        close(weightModel(restored).weights, original.weights);
+      }
+    }
+  });
+
+  test(`Gr(2,${size}): successive vertex drags can be undone one at a time`, () => {
+    const initial = weightPreset(size);
+    const firstPoint = weightCircuit(initial, 'p12').point;
+    const first = moveToVertex(initial, 'p12', 0);
+    const secondPoint = weightCircuit(first, 'p23').point;
+    const second = moveToVertex(first, 'p23', 1);
+    assert.equal(weightModel(second).shape, size === 3 ? 'simplex edge' : 'triangle');
+    const firstAgain = moveWeight(second, 'p2', secondPoint);
+    close(firstAgain.weights, first.weights);
+    assert.deepEqual(editableWeightCircuit(firstAgain, weightCircuit(firstAgain, 'p1')).support, [0, 1]);
+    close(moveWeight(firstAgain, 'p1', firstPoint).weights, initial.weights);
+  });
+}
+
+test('Gr(2,4): reopening one collapsed pair preserves subsequent edits to another pair', () => {
+  const initial = weightPreset(4);
+  const first = moveToVertex(initial, 'p12', 0);
+  const second = moveToVertex(first, 'p34', 2);
+  const reopened = moveWeight(second, 'p3', [0, 0, 0.75, 0.25]);
+  const restored = moveWeight(reopened, 'p1', weightCircuit(initial, 'p12').point);
+  close(weightCircuit(restored, 'p34').point, [0, 0, 0.75, 0.25]);
+  close(weightCircuit(restored, 'p12').point, weightCircuit(initial, 'p12').point);
+});
+
+test('splitting a nearly zero pair cannot remove both endpoints of the editable edge', () => {
+  const boundary = moveToVertex(weightPreset(3), 'p12', 0);
+  const tiny = 1.5e-12;
+  const nearVertex = moveWeight(boundary, 'p23', [0, 1 - tiny, tiny]);
+  const moved = moveWeight(nearVertex, 'p1', [0.5, 0.5, 0]);
+  assert.ok(moved.weights[0] > 0 || moved.weights[1] > 0, 'Both weights vanished at the rounding threshold');
+});
+
+test('rank-two boundary presets keep their fixed vertices when a movable pair is restored', () => {
+  for (const [size, name] of [[3, 'segment'], [3, 'edge'], [4, 'cone'], [4, 'triangle'], [4, 'facet']]) {
+    const initial = weightPreset(size, name);
+    const circuits = weightModel(initial).circuits;
+    const fixed = circuits.filter(point => point.support.length === 1);
+    for (const vertex of fixed) {
+      assert.deepEqual(editableWeightCircuit(initial, vertex).support, vertex.support);
+      close(moveWeight(initial, vertex.id, initial.weights).weights, initial.weights);
+    }
+    for (const pair of circuits.filter(point => point.support.length === 2)) {
+      const boundary = moveToVertex(initial, pair.id, pair.support[0]);
+      const restored = moveWeight(boundary, boundary.movedCircuitId, pair.point);
+      close(restored.weights, initial.weights);
+      for (const vertex of fixed) {
+        assert.deepEqual(editableWeightCircuit(restored, weightCircuit(restored, vertex.id)).support, vertex.support);
+      }
+    }
   }
 });
